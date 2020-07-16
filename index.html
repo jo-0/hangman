@@ -3,6 +3,9 @@
 	<head>
 		<title> Hangman </title>
 
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width">
+
 		<!-- Stylesheet -->
 		<link rel="stylesheet" href="style.css">
 	</head>
@@ -10,13 +13,18 @@
 	<!-- Body -->
 	<body>
 		<header>
-				<p> Welcome to hangman </p>
+				<h1> Hangman </h1>
 		</header>
 
 		<main>
-			<!--
-			<canvas id="stickman">This text will hsow if the browser doesn't support HTML5</canvas>
-			-->
+			<section>
+				<img id="hangman-image" src="images/0.jpg" alt="Loading image">
+			</section>
+			<section>
+				<p> Guess the Naruto (Anime) character </p>
+				<p id="answer"></p>
+				<button id="reset-button"> Reset </button>
+			</section>
 		</main>
 
 		<footer>
