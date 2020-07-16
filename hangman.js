@@ -28,6 +28,7 @@ function fillInTheBlanks(guessedName) {
 		
 	if (status === selectedName) {
 		// say you won.
+		document.getElementById("result").innerHTML = "Yayy! You won";
 	}
 
 	document.getElementById("answer").innerHTML = status;
@@ -53,6 +54,11 @@ function updateHangmanImage() {
 		document.getElementById("result").innerHTML = "You lost";
 	}
 	document.getElementById("hangman-image").src = "./images/" + mistakesCount + ".jpg";
+}
+
+
+function resetHangman() {
+	// reset everything
 }
 
 
