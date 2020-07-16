@@ -3,5 +3,6 @@ body {
 }
 
 #reset-button {
-	padding: 16px;
+	padding: 8px;
+	font-size: medium;
 }
