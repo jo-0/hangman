@@ -21,14 +21,20 @@ const randomName = () => {
 }
 
 
+function pickRandomName() {
+	return randomName();
+}
+
+
 function fillInTheBlanks(guessedName) {
 	console.log("The selected random name is " + selectedName);
+	console.log(typeof selectedName);
 	let status = selectedName.split("")
 		.map(char => (guessedName.indexOf(char) >= 0 ? char : " __ ")).join("");
 		
 	if (status === selectedName) {
 		// say you won.
-		document.getElementById("result").innerHTML = "Yayy! You won";
+		document.getElementById("result").innerHTML = "Yayy! You won".fontcolor("green");
 	}
 
 	document.getElementById("answer").innerHTML = status;
@@ -37,6 +43,12 @@ function fillInTheBlanks(guessedName) {
 
 function checkEnteredCharacter(inputChar) {
 	userEnteredCharacters.indexOf(inputChar) === -1 ? userEnteredCharacters.push(inputChar) : null;
+
+	if (mistakesCount > 5) {
+		console.log("You lost");
+		resetHangman();
+		return;
+	}
 
 	if (selectedName.indexOf(inputChar) >= 0) {
 		fillInTheBlanks(userEnteredCharacters);
@@ -49,16 +61,20 @@ function checkEnteredCharacter(inputChar) {
 
 
 function updateHangmanImage() {
-	if (mistakesCount >= 6) {
+	if (mistakesCount === 6) {
 		document.getElementById("answer").innerHTML = "Name: " + selectedName;
-		document.getElementById("result").innerHTML = "You lost";
+		document.getElementById("result").innerHTML = "You lost".fontcolor("red");
 	}
 	document.getElementById("hangman-image").src = "./images/" + mistakesCount + ".jpg";
 }
 
 
 function resetHangman() {
-	// reset everything
+	console.log("Resetting everything");
+	document.getElementById("result").style.visibility = "hidden";
+	userEnteredCharacters = [];
+	mistakesCount = 0;
+	init();
 }
 
 
@@ -70,12 +86,15 @@ document.onkeypress = function (e) {
 }
 
 
-let  userEnteredCharacters = [];
-let selectedName = randomName();
+let userEnteredCharacters = [];
 let mistakesCount = 0;
+let selectedName = "";
 
 
 function init() {
+	document.getElementById("hangman-image").src = "./images/0.jpg";
+	selectedName = pickRandomName();
+	// console.log(typeof selectedName);
 	fillInTheBlanks(userEnteredCharacters);
 }
 
