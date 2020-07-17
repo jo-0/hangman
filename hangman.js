@@ -98,7 +98,7 @@ document.onkeypress = function (e) {
 
 	e = e || window.event;
 	let charCode = e.keyCode || e.which;
-	let charString = String.fromCharCode(charCode);
+	let charString = String.fromCharCode(charCode).toLowerCase();
 	checkEnteredCharacter(charString);
 }
 
