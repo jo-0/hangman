@@ -26,61 +26,76 @@ function pickRandomName() {
 }
 
 
-function fillInTheBlanks(guessedName) {
-	let status = selectedName.split("")
-		.map(char => (guessedName.indexOf(char) >= 0 ? char : " __ ")).join("");
-		
+function getCurrentPuzzleState() {
+	return selectedRandomName.split("")
+		.map(char => (userEnteredCharacters.indexOf(char) >= 0 ? char : " __ ")).join("");
+}
 
-		console.log("the status is now " + status);
-	if (status === selectedName) {
-		// say you won.
-		let result = document.getElementById("result");
-		result.removeAttribute("hidden");
-		result.innerHTML = "Yayy! You won".fontcolor("green");
-	}
 
-	document.getElementById("answer").innerHTML = status;
+function setupAndUpdateWord() {
+	let currentStatusOfPuzzle = getCurrentPuzzleState();
+	showResultIfNecessary(currentStatusOfPuzzle);	
+	document.getElementById("answer").innerHTML = currentStatusOfPuzzle;
 }
 
 
 function checkEnteredCharacter(inputChar) {
 	userEnteredCharacters.indexOf(inputChar) === -1 ? userEnteredCharacters.push(inputChar) : null;
 
-	if (mistakesCount > 5) {
+	if (totalMistakes > 5) {
 		resetHangman();
 		return;
 	}
 
-	if (selectedName.indexOf(inputChar) >= 0) {
-		fillInTheBlanks(userEnteredCharacters);
+	if (selectedRandomName.indexOf(inputChar) >= 0) {
+		setupAndUpdateWord(userEnteredCharacters);
 	} else {
 		// update the image
-		mistakesCount++;
+		totalMistakes++;
 		updateHangmanImage();
 	}
 }
 
 
 function updateHangmanImage() {
-	if (mistakesCount === 6) {
-		document.getElementById("answer").innerHTML = "The name is: " + selectedName;
+	showResultIfNecessary();
+	document.getElementById("hangman-image").src = "./images/" + totalMistakes + ".jpg";
+}
+		
+
+
+function showResultIfNecessary(currentStatusOfPuzzle) {
+	if (totalMistakes === 6) {
+		document.getElementById("answer").innerHTML = "The name is: " + selectedRandomName;
 		let result = document.getElementById("result");
 		result.removeAttribute("hidden");
 		result.innerHTML = "You lost".fontcolor("red");
 	}
-	document.getElementById("hangman-image").src = "./images/" + mistakesCount + ".jpg";
+	if (currentStatusOfPuzzle === selectedRandomName) {
+		// say you won.
+		let result = document.getElementById("result");
+		result.removeAttribute("hidden");
+		result.innerHTML = "Yayy! You won".fontcolor("green");
+	}
+
 }
 
 
 function resetHangman() {
 	document.getElementById("result").setAttribute("hidden", true);
 	userEnteredCharacters = [];
-	mistakesCount = 0;
+	totalMistakes = 0;
 	init();
 }
 
 
 document.onkeypress = function (e) {
+	let currentStatusOfPuzzle = getCurrentPuzzleState();
+	if (currentStatusOfPuzzle === selectedRandomName) {
+		resetHangman();
+		return;
+	}
+
 	e = e || window.event;
 	let charCode = e.keyCode || e.which;
 	let charString = String.fromCharCode(charCode);
@@ -89,15 +104,15 @@ document.onkeypress = function (e) {
 
 
 let userEnteredCharacters = [];
-let mistakesCount = 0;
-let selectedName = "";
+let totalMistakes = 0;
+let selectedRandomName = "";
 
 
 function init() {
 	document.getElementById("hangman-image").src = "./images/0.jpg";
-	selectedName = pickRandomName();
-	console.log(selectedName);
-	fillInTheBlanks(userEnteredCharacters);
+	selectedRandomName = pickRandomName();
+	console.log(selectedRandomName);
+	setupAndUpdateWord(userEnteredCharacters);
 }
 
 
